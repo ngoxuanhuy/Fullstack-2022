@@ -4,22 +4,52 @@ const Button = ({ handleClick, text }) => <button onClick={handleClick}>{text}</
 
 const StatisticLine = ({ statistic, good, bad, neutral }) => {
   if (statistic === 'good') {
-    return <div>Good {good}</div>
+    return( 
+      <>
+        <td>Good</td>
+        <td>{good}</td>
+      </>
+    )
   }
   if (statistic === 'bad') {
-    return <div>Bad {bad}</div>
+    return( 
+      <>
+        <td>Bad</td>
+        <td>{bad}</td>
+      </>
+    )
   }
   if (statistic === 'neutral') {
-    return <div>Neutral {neutral}</div>
+    return( 
+      <>
+        <td>Neutral</td>
+        <td>{neutral}</td>
+      </>
+    )
   }
   if (statistic === 'all') {
-    return <div>All {good + bad + neutral}</div>
+    return( 
+      <>
+        <td>All</td>
+        <td>{good + bad + neutral}</td>
+      </>
+    )
   }
   if (statistic === 'average') {
-    return <div>Average {(good-bad) / (good+neutral+bad)}</div>
+    return( 
+      <>
+        <td>Average</td>
+        <td>{(good-bad) / (good+neutral+bad)}</td>
+      </>
+    )
   }
   if (statistic === 'positive') {
-    return <div>Positive {good/(good+neutral+bad)*100} %</div>
+    return( 
+      <>
+        <td>Positive</td>
+        <td>{good/(good+neutral+bad)*100} %</td>
+      </>
+    )
   }
 }
 
@@ -35,12 +65,16 @@ const Statistics = ({good, neutral, bad}) => {
   return (
     <>
       <h3>Statistics</h3>
-      <StatisticLine statistic="good" good={good}/>
-      <StatisticLine statistic="bad" bad={bad}/>
-      <StatisticLine statistic="neutral" neutral={neutral}/>
-      <StatisticLine statistic="all" good={good} bad={bad} neutral={neutral}/>
-      <StatisticLine statistic="average" good={good} bad={bad} neutral={neutral}/>
-      <StatisticLine statistic="positive" good={good} bad={bad} neutral={neutral}/>
+      <table>
+        <tbody>
+          <tr><StatisticLine statistic="good" good={good}/></tr>
+          <tr><StatisticLine statistic="bad" bad={bad}/></tr>
+          <tr><StatisticLine statistic="neutral" neutral={neutral}/></tr>
+          <tr><StatisticLine statistic="all" good={good} bad={bad} neutral={neutral}/></tr>
+          <tr><StatisticLine statistic="average" good={good} bad={bad} neutral={neutral}/></tr>
+          <tr><StatisticLine statistic="positive" good={good} bad={bad} neutral={neutral}/></tr>
+        </tbody>
+      </table>
     </>
   )
 }

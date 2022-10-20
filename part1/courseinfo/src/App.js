@@ -8,9 +8,13 @@ const Part = ({part}) => (
   </p>
 )
 
-const Total = (props) => (
-  <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}</p>
-)
+const Total = ({parts}) => {
+  let total = 0
+  parts.map(part => total += part.exercises)
+  return (
+    <p><strong>Total of {total} exercises</strong></p>
+  )
+}
 
 const Course = ({courses}) => {
   const {name, parts} = courses
@@ -18,6 +22,7 @@ const Course = ({courses}) => {
     <>
       <Header name={name}/>
       {parts.map(part => <Part key={part.id} part={part}/>)}
+      <Total parts={parts}/>
     </>
   )
 }

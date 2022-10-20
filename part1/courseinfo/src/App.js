@@ -9,10 +9,9 @@ const Part = ({part}) => (
 )
 
 const Total = ({parts}) => {
-  let total = 0
-  parts.map(part => total += part.exercises)
+  const total = parts.map(part => part.exercises).reduce((s,p) => s+p)
   return (
-    <p><strong>Total of {total} exercises</strong></p>
+    <p>Total is {total} exercises</p>
   )
 }
 

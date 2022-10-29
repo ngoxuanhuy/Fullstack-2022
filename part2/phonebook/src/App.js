@@ -27,8 +27,18 @@ const App = () => {
       name: newName,
       number: newPhoneNumber
     }
-    if (persons.find(person => JSON.stringify(person.name) === JSON.stringify(newObj.name))) {
-      alert(`${newName} is already added to phonebook`)
+    const alreadyAddedContact = persons.find(person => JSON.stringify(person.name) === JSON.stringify(newObj.name))
+    if (alreadyAddedContact) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+        personsService
+          .updateContact(alreadyAddedContact.id, newObj)
+          .then(returnedPerson => {
+            console.log("returnedPerson: ", returnedPerson)
+            setPersons(persons.map(p => p.id !== returnedPerson.id ? p : returnedPerson))
+            setNewName('')
+            setNewPhoneNumber('')
+          })
+      }
     } else {
       // Add new person to the backend server
       personsService

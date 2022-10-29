@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
-import Persons from './components/Persons'
+import Person from './components/Person'
 
 import personsService from './services/persons'
 
@@ -18,6 +18,7 @@ const App = () => {
       .then(returnedPersons => {
         setPersons(returnedPersons)
       })
+      .catch(err => alert(err))
   }, [])
 
   const addNewContact = (event) => {
@@ -56,6 +57,16 @@ const App = () => {
     ? persons
     : persons.filter(person => JSON.stringify(person.name).toLowerCase().includes(searchText.toLowerCase()) === true)
 
+  const removeContact = (id, name) => {
+    if (window.confirm(`Delete ${name} ?`)) {
+      personsService
+        .removeContact(id)
+        .then(() => {
+          setPersons(persons.filter(p => p.id !== id))
+        })
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -66,7 +77,13 @@ const App = () => {
         newNameValue={newName} handleNewName={handleNewName}
         newPhoneValue={newPhoneNumber} handleNewPhoneNumber={handleNewPhoneNumber} />
       <h2>Numbers</h2>
-      <Persons filteredContact={filteredContact} />
+      <ul>
+        {filteredContact.map(person => 
+          <Person key={person.id} name={person.name} 
+                  number={person.number}
+                  removeContact={() => removeContact(person.id, person.name)}/>
+        )}
+      </ul>
     </div>
   )
 }

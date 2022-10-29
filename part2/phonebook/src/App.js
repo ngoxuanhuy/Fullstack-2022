@@ -29,9 +29,17 @@ const App = () => {
     if (persons.find(person => JSON.stringify(person.name) === JSON.stringify(newObj.name))) {
       alert(`${newName} is already added to phonebook`)
     } else {
-      setPersons(persons.concat(newObj))
-      setNewName('')
-      setNewPhoneNumber('')
+      // Add new person to the backend server
+      axios
+        .post("http://localhost:3001/persons", newObj)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          setNewName('')
+          setNewPhoneNumber('')
+        })
+        .catch(err => {
+          alert(err)
+        })
     }
   }
 
@@ -47,21 +55,21 @@ const App = () => {
     setSearchText(event.target.value)
   }
 
-  const filteredContact = !searchText 
+  const filteredContact = !searchText
     ? persons
     : persons.filter(person => JSON.stringify(person.name).toLowerCase().includes(searchText.toLowerCase()) === true)
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter searchTextValue={searchText} handleSearchName={searchName}/>
-      
+      <Filter searchTextValue={searchText} handleSearchName={searchName} />
+
       <h2>Add a new contact</h2>
-      <PersonForm addNewContact={addNewContact} 
-                  newNameValue={newName} handleNewName={handleNewName}
-                  newPhoneValue={newPhoneNumber} handleNewPhoneNumber={handleNewPhoneNumber}/>
+      <PersonForm addNewContact={addNewContact}
+        newNameValue={newName} handleNewName={handleNewName}
+        newPhoneValue={newPhoneNumber} handleNewPhoneNumber={handleNewPhoneNumber} />
       <h2>Numbers</h2>
-      <Persons filteredContact={filteredContact}/>
+      <Persons filteredContact={filteredContact} />
     </div>
   )
 }

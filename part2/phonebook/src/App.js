@@ -4,6 +4,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Person from './components/Person'
 import Notification from './components/Notification'
+import ErrorNotification from "./components/ErrorNotification";
 
 import personsService from './services/persons'
 
@@ -13,6 +14,7 @@ const App = () => {
   const [newPhoneNumber, setNewPhoneNumber] = useState('')
   const [searchText, setSearchText] = useState('')
   const [notificationMessage, setNotificationMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personsService
@@ -41,6 +43,15 @@ const App = () => {
             setNotificationMessage(`Updated phone number of '${returnedPerson.name}'`)
             setTimeout(() => {
               setNotificationMessage(null)
+            }, 3000)
+          })
+          .catch(error => {
+            setNewName('')
+            setNewPhoneNumber('')
+            setPersons(persons.filter(p => p.id !== alreadyAddedContact.id))
+            setErrorMessage(`Information of ${newName} has already been removed from server`)
+            setTimeout(() => {
+              setErrorMessage(null)
             }, 3000)
           })
       }
@@ -87,6 +98,13 @@ const App = () => {
             setNotificationMessage(null)
           }, 3000)
         })
+        .catch(err => {
+          setPersons(persons.filter(p => p.id !== id))
+          setErrorMessage(`Information of ${name} has already been removed from server`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 3000)
+        })
     }
   }
 
@@ -94,6 +112,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Notification message={notificationMessage} />
+      <ErrorNotification message={errorMessage}/>
       <Filter searchTextValue={searchText} handleSearchName={searchName} />
 
       <h2>Add a new contact</h2>
